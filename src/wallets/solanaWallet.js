@@ -1,8 +1,7 @@
-import web3, { Keypair, Transaction, SystemProgram, LAMPORTS_PER_SOL, Connection, sendAndConfirmTransaction } from '@solana/web3.js'
+import { Connection, Keypair, LAMPORTS_PER_SOL, sendAndConfirmTransaction, SystemProgram, Transaction } from '@solana/web3.js'
+import * as base58 from 'base-58'
 import { mnemonicToSeedSync } from 'bip39'
 import { derivePath } from 'ed25519-hd-key'
-
-
 
 export default class SolanaWallet {
     constructor(mnemonic, providerUrl) {
@@ -23,7 +22,7 @@ export default class SolanaWallet {
         tx.add(
             SystemProgram.transfer({
                 fromPubkey: this.keypair.publicKey,
-                toPubkey: Keypair.generate().publicKey, //temperorily creating random receiving address, need to convert base58 -> Uint8Array.then only it works
+                toPubkey: base58.decode(recipient),
                 lamports: LAMPORTS_PER_SOL
             })
         )
